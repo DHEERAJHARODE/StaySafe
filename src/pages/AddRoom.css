@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   padding: 24px;
-  font-family: 'Inter', sans-serif; /* Optional: Agar global font nahi hai */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
 /* CARD: Main Form Container */
@@ -71,7 +71,7 @@
   box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
 }
 
-/* --- NEW: LOCATION INPUT & BUTTON STYLE --- */
+/* --- LOCATION INPUT & BUTTON STYLE --- */
 .location-input-wrapper {
   display: flex;
   align-items: center;
@@ -81,16 +81,15 @@
 
 .location-input-wrapper input {
   flex: 1;
-  padding-right: 10px; /* Space for text */
+  padding-right: 10px;
 }
 
-/* Location Button (Square with Icon) */
 .location-btn {
   background-color: #f3f4f6;
   border: 1px solid #d1d5db;
   border-radius: 10px;
   width: 46px;
-  height: 46px; /* Matches input height roughly */
+  height: 46px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -99,7 +98,7 @@
   transition: all 0.2s ease-in-out;
   padding: 0;
   color: #4b5563;
-  flex-shrink: 0; /* Button shrink na ho */
+  flex-shrink: 0;
 }
 
 .location-btn:hover:not(:disabled) {
@@ -119,15 +118,14 @@
   background-color: #f9fafb;
 }
 
-/* Location Success Message */
 .location-success {
   font-size: 12px;
-  color: #059669; /* Green */
+  color: #059669;
   font-weight: 600;
   display: flex;
   align-items: center;
   gap: 4px;
-  margin-top: -4px; /* Thoda upar adjust */
+  margin-top: -4px;
 }
 
 .location-success::before {
@@ -135,40 +133,72 @@
   display: inline-block;
 }
 
-/* CHECKBOX GRID (Available For) */
+/* =========================================
+   CHECKBOX GRID (Available For - Beautiful Style)
+   ========================================= */
 .checkbox-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
+  gap: 12px;
+}
+
+.checkbox-grid input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
 .checkbox-grid label {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  padding: 10px;
-  background: #f3f4f6;
-  border: 1px solid transparent;
-  border-radius: 10px;
+  padding: 12px 6px;
+  background: #ffffff;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
   cursor: pointer;
-  font-size: 13px;
-  font-weight: 500;
-  transition: all 0.2s;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
+  position: relative;
 }
 
 .checkbox-grid label:hover {
-  background: #e5e7eb;
+  border-color: #c7d2fe;
+  background: #f8fafc;
+  color: #4b5563;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.04);
 }
 
-/* Active State for Checkboxes (Optional logic styling) */
-.checkbox-grid input:checked + span, /* If you wrapped text in span */
 .checkbox-grid label:has(input:checked) {
   background: #eef2ff;
-  border-color: #6366f1;
+  border-color: #4f46e5;
   color: #4f46e5;
-  font-weight: 600;
+  box-shadow: 0 4px 14px rgba(79, 70, 229, 0.2);
+  transform: translateY(-2px);
+}
+
+.checkbox-grid label:has(input:checked)::before {
+  content: "✓";
+  font-size: 14px;
+  font-weight: 800;
+  margin-right: 6px;
+  color: #4f46e5;
+  animation: popIn 0.3s ease-out forwards;
+}
+
+.checkbox-grid label:active {
+  transform: translateY(0) scale(0.96);
+  box-shadow: 0 2px 4px rgba(79, 70, 229, 0.1);
+}
+
+@keyframes popIn {
+  0% { transform: scale(0); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
 }
 
 /* TOGGLE SWITCH (Available Now) */
@@ -231,6 +261,24 @@ input[type="file"] {
   background: white;
   padding: 8px;
   font-size: 13px;
+  cursor: pointer;
+}
+
+/* File Upload Button Design ko thoda modern banaya */
+input[type="file"]::file-selector-button {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: background 0.2s;
+}
+
+input[type="file"]::file-selector-button:hover {
+  background: #e0e7ff;
 }
 
 .image-preview {
@@ -288,6 +336,6 @@ input[type="file"] {
   
   .checkbox-grid label {
     font-size: 12px;
-    padding: 8px;
+    padding: 10px 4px;
   }
 }

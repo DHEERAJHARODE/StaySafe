@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { db } from "../firebase/firebaseConfig";
 import { addDoc, collection } from "firebase/firestore";
 import { useAuth } from "../context/AuthContext";
@@ -14,7 +14,7 @@ const AddRoom = () => {
   const [rent, setRent] = useState("");
   const [location, setLocation] = useState("");
   const [coords, setCoords] = useState({ lat: null, lng: null });
-  const [locationLoading, setLocationLoading] = useState(false); // New loading state for location
+  const [locationLoading, setLocationLoading] = useState(false);
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -33,9 +33,10 @@ const AddRoom = () => {
   };
 
   // Get Location & Auto-Fill Address
-  const handleGetCurrentLocation = () => {
+  // isAutoLoad parameter check karega ki page load par call hua hai ya button click par
+  const handleGetCurrentLocation = (isAutoLoad = false) => {
     if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
+      if (!isAutoLoad) alert("Geolocation is not supported by your browser");
       return;
     }
 
@@ -57,24 +58,33 @@ const AddRoom = () => {
               data.address.suburb || data.address.neighbourhood,
               data.address.city || data.address.town || data.address.village,
               data.address.state
-            ].filter(Boolean); // Filter out undefined/null parts
+            ].filter(Boolean);
             
             setLocation(addressParts.join(", ") || data.display_name);
           }
         } catch (error) {
           console.error("Error fetching address:", error);
-          alert("Coordinates fetched, but failed to auto-fill address. Please type manually.");
+          if (!isAutoLoad) alert("Coordinates fetched, but failed to auto-fill address. Please type manually.");
         } finally {
           setLocationLoading(false);
         }
       },
       (error) => {
         setLocationLoading(false);
-        alert("Unable to retrieve location. Please check browser permissions.");
-        console.error(error);
+        // Agar auto-load par error aati hai (jaise user ne block kiya ho), toh alert mat dikhao
+        if (!isAutoLoad) alert("Unable to retrieve location. Please check browser permissions.");
+        console.error("Location Error:", error);
       }
     );
   };
+
+  // 👇 NAYA ADD KIYA GAYA CODE 👇
+  // Ye useEffect page load hote hi automatically location fetch karega
+  useEffect(() => {
+    handleGetCurrentLocation(true); // 'true' pass kiya taaki bina wajeh alert na aaye
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
+  // 👆 ----------------------- 👆
 
   const handleAddRoom = async (e) => {
     e.preventDefault();
@@ -163,7 +173,6 @@ const AddRoom = () => {
           />
         </div>
 
-        {/* Updated Location Field */}
         <div className="form-group">
           <label>Location</label>
           <div className="location-input-wrapper">
@@ -177,7 +186,7 @@ const AddRoom = () => {
             <button 
               type="button" 
               className="location-btn"
-              onClick={handleGetCurrentLocation}
+              onClick={() => handleGetCurrentLocation(false)} // User click kare toh alert show ho sake
               disabled={locationLoading}
               title="Get My Current Location"
             >
