@@ -1,101 +1,216 @@
+/* CONTAINER: Page Background */
 .add-room-page {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f6f8fb, #eef2ff);
+  background: linear-gradient(135deg, #f3f4f6 0%, #e0e7ff 100%);
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 24px;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
+/* CARD: Main Form Container */
 .add-room-card {
   width: 100%;
-  max-width: 420px;
-  background: #fff;
-  padding: 32px 28px;
-  border-radius: 20px;
-  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  max-width: 460px;
+  background: #ffffff;
+  padding: 40px 32px;
+  border-radius: 24px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0,0,0,0.05);
+  border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .add-room-card h2 {
   text-align: center;
-  font-size: 22px;
-  margin-bottom: 6px;
+  font-size: 26px;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+  margin-top: 0;
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
   text-align: center;
-  font-size: 14px;
+  font-size: 14.5px;
   color: #6b7280;
-  margin-bottom: 26px;
+  margin-bottom: 32px;
+  line-height: 1.5;
 }
 
+/* FORM GROUPS */
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 16px;
+  gap: 8px;
+  margin-bottom: 22px;
 }
 
 .form-group label {
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 600;
   color: #374151;
 }
 
-.form-group input {
-  padding: 12px 14px;
+/* INPUTS (General) */
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"] {
+  padding: 14px 16px;
+  border: 1.5px solid #e5e7eb;
   border-radius: 12px;
-  border: 1px solid #d1d5db;
+  font-size: 15px;
+  color: #1f2937;
+  transition: all 0.25s ease;
   outline: none;
-  font-size: 14px;
+  background: #f9fafb;
+}
+
+.form-group input::placeholder {
+  color: #9ca3af;
 }
 
 .form-group input:focus {
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.12);
+  border-color: #6366f1;
+  background: #ffffff;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
 }
 
-.checkbox-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
+/* LOCATION INPUT & BUTTON STYLE */
+.location-input-wrapper {
+  display: flex;
+  align-items: center;
   gap: 10px;
 }
 
-.checkbox-grid label {
+.location-input-wrapper input {
+  flex: 1;
+}
+
+/* Location Button */
+.location-btn {
+  background-color: #ffffff;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  width: 50px;
+  height: 50px;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 6px;
-  padding: 8px;
-  background: #f3f4f6;
-  border-radius: 10px;
+  font-size: 20px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  color: #4b5563;
+  flex-shrink: 0;
 }
 
-.checkbox-grid label:hover {
-  background: #e0e7ff;
+.location-btn:hover:not(:disabled) {
+  background-color: #eef2ff;
+  border-color: #6366f1;
+  color: #4f46e5;
 }
 
-.form-group img {
-  margin-top: 12px;
-  width: 100%;
-  max-height: 200px;
-  object-fit: cover;
-  border-radius: 14px;
+.location-btn:active:not(:disabled) {
+  transform: scale(0.95);
 }
 
-/* TOGGLE */
+.location-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f3f4f6;
+}
+
+.location-success {
+  font-size: 13px;
+  color: #059669;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: -4px;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.location-success::before {
+  content: "✓";
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #d1fae5;
+  color: #059669;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  font-size: 10px;
+}
+
+/* CHECKBOX GRID (Available For - Styled as Pills) */
+.checkbox-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+
+.checkbox-pill-label {
+  cursor: pointer;
+  user-select: none;
+}
+
+.hidden-checkbox {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.pill-text {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 12px 10px;
+  background: #f9fafb;
+  border: 1.5px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6b7280;
+  transition: all 0.2s ease;
+}
+
+.checkbox-pill-label:hover .pill-text {
+  background: #f3f4f6;
+  border-color: #d1d5db;
+}
+
+/* Active State for Pills */
+.hidden-checkbox:checked ~ .pill-text {
+  background: #eef2ff;
+  border-color: #6366f1;
+  color: #4f46e5;
+  box-shadow: 0 2px 10px rgba(99, 102, 241, 0.1);
+}
+
+/* TOGGLE SWITCH (Available Now) */
 .toggle-label {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 14px;
+  cursor: pointer;
+  padding: 8px 0;
+  margin-top: 4px;
+}
+
+.toggle-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
 }
 
 .toggle-switch {
   position: relative;
-  width: 46px;
-  height: 24px;
+  width: 52px;
+  height: 28px;
 }
 
 .toggle-switch input {
@@ -106,52 +221,134 @@
 
 .slider {
   position: absolute;
-  inset: 0;
-  background-color: #d1d5db;
-  border-radius: 999px;
   cursor: pointer;
-  transition: 0.3s;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #d1d5db;
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 34px;
 }
 
-.slider::before {
-  content: "";
+.slider:before {
   position: absolute;
-  height: 18px;
-  width: 18px;
+  content: "";
+  height: 22px;
+  width: 22px;
   left: 3px;
   bottom: 3px;
   background-color: white;
+  transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   border-radius: 50%;
-  transition: 0.3s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-.toggle-switch input:checked + .slider {
+input:checked + .slider {
   background-color: #4f46e5;
 }
 
-.toggle-switch input:checked + .slider::before {
-  transform: translateX(22px);
+input:checked + .slider:before {
+  transform: translateX(24px);
 }
 
-button {
-  width: 100%;
-  margin-top: 14px;
-  padding: 14px;
-  background: linear-gradient(135deg, #4f46e5, #6366f1);
-  color: white;
-  border: none;
-  border-radius: 14px;
-  font-size: 15px;
+/* IMAGE UPLOAD & PREVIEW */
+.file-input {
+  padding: 10px !important;
+  background: #f9fafb !important;
+  border: 1.5px dashed #d1d5db !important;
   cursor: pointer;
 }
 
-button:disabled {
-  background: #9ca3af;
-  cursor: not-allowed;
+.file-input:focus {
+  border-style: solid !important;
 }
 
+/* Style the default "Choose File" button */
+.file-input::file-selector-button {
+  background: #eef2ff;
+  color: #4f46e5;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-right: 12px;
+  transition: background 0.2s;
+}
+
+.file-input::file-selector-button:hover {
+  background: #e0e7ff;
+}
+
+.image-preview-wrapper {
+  margin-top: 16px;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e5e7eb;
+}
+
+.image-preview {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  display: block;
+}
+
+/* SUBMIT BUTTON */
+.submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+  color: white;
+  border: none;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: all 0.2s ease;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.25);
+}
+
+.submit-btn:hover:not(:disabled) {
+  box-shadow: 0 10px 24px rgba(79, 70, 229, 0.4);
+  transform: translateY(-2px);
+}
+
+.submit-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+.submit-btn:disabled {
+  background: #a5b4fc;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* Utilities */
+.fade-in {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive Tweaks */
 @media (max-width: 480px) {
+  .add-room-card {
+    padding: 32px 20px;
+    border-radius: 20px;
+  }
+  
   .checkbox-grid {
-    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  
+  .pill-text {
+    font-size: 13px;
+    padding: 10px 8px;
   }
 }

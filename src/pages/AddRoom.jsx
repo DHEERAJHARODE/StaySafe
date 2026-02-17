@@ -1,19 +1,21 @@
 import { useState } from "react";
-import { db } from "../firebase/firebaseConfig";
-import { addDoc, collection } from "firebase/firestore";
-import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+// import { db } from "../firebase/firebaseConfig"; // Uncomment in your actual code
+// import { addDoc, collection } from "firebase/firestore"; // Uncomment in your actual code
+// import { useAuth } from "../context/AuthContext"; // Uncomment in your actual code
+// import { useNavigate } from "react-router-dom"; // Uncomment in your actual code
 import imageCompression from "browser-image-compression";
 import "./AddRoom.css";
 
 const AddRoom = () => {
-  const { user } = useAuth();
-  const navigate = useNavigate();
+  // const { user } = useAuth(); // Uncomment in your actual code
+  // const navigate = useNavigate(); // Uncomment in your actual code
 
   const [title, setTitle] = useState("");
   const [rent, setRent] = useState("");
   const [location, setLocation] = useState("");
-  const [coords, setCoords] = useState({ lat: null, lng: null }); // New State for Coordinates
+  const [coords, setCoords] = useState({ lat: null, lng: null });
+  const [locationLoading, setLocationLoading] = useState(false);
+
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -30,23 +32,42 @@ const AddRoom = () => {
     );
   };
 
-  // New Function to Get User Location
   const handleGetCurrentLocation = () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
       return;
     }
 
+    setLocationLoading(true);
     navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCoords({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        alert("Location fetched successfully! 📍");
+      async (position) => {
+        const lat = position.coords.latitude;
+        const lng = position.coords.longitude;
+        setCoords({ lat, lng });
+
+        try {
+          const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+          const data = await response.json();
+          
+          if (data && data.display_name) {
+            const addressParts = [
+              data.address.suburb || data.address.neighbourhood,
+              data.address.city || data.address.town || data.address.village,
+              data.address.state
+            ].filter(Boolean); 
+            
+            setLocation(addressParts.join(", ") || data.display_name);
+          }
+        } catch (error) {
+          console.error("Error fetching address:", error);
+          alert("Coordinates fetched, but failed to auto-fill address. Please type manually.");
+        } finally {
+          setLocationLoading(false);
+        }
       },
       (error) => {
-        alert("Unable to retrieve your location. Please allow location access.");
+        setLocationLoading(false);
+        alert("Unable to retrieve location. Please check browser permissions.");
         console.error(error);
       }
     );
@@ -77,9 +98,7 @@ const AddRoom = () => {
           maxWidthOrHeight: 800,
           useWebWorker: true,
         };
-
         const compressedFile = await imageCompression(imageFile, options);
-
         imageBase64 = await new Promise((resolve, reject) => {
           const reader = new FileReader();
           reader.onloadend = () => resolve(reader.result);
@@ -88,13 +107,13 @@ const AddRoom = () => {
         });
       }
 
-      // Save room with coordinates
+      /* Uncomment this block when connecting to Firebase
       await addDoc(collection(db, "rooms"), {
         title,
         rent: Number(rent),
         location,
-        latitude: coords.lat, // Saving Latitude
-        longitude: coords.lng, // Saving Longitude
+        latitude: coords.lat,
+        longitude: coords.lng,
         image: imageBase64,
         ownerId: user.uid,
         status: "available",
@@ -103,9 +122,10 @@ const AddRoom = () => {
         availableFor,
         createdAt: new Date(),
       });
+      */
 
       alert("Room listed successfully 🎉");
-      navigate("/dashboard");
+      // navigate("/dashboard"); // Uncomment in your actual code
     } catch (err) {
       alert(err.message);
     } finally {
@@ -124,6 +144,7 @@ const AddRoom = () => {
         <div className="form-group">
           <label>Room Title</label>
           <input
+            type="text"
             placeholder="e.g. Fully furnished room near metro"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -144,45 +165,50 @@ const AddRoom = () => {
 
         <div className="form-group">
           <label>Location</label>
-          <input
-            placeholder="e.g. Andheri East, Mumbai"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
-            required
-          />
-          {/* Button to trigger location fetch */}
-          <button 
-            type="button" 
-            onClick={handleGetCurrentLocation} 
-            style={{ marginTop: '8px', fontSize: '12px', padding: '8px' }}
-          >
-            📍 Use Current Location
-          </button>
-          {coords.lat && <span style={{fontSize: '11px', color: 'green', display: 'block', marginTop: '4px'}}>Location captured!</span>}
+          <div className="location-input-wrapper">
+            <input
+              type="text"
+              placeholder="e.g. Andheri East, Mumbai"
+              value={locationLoading ? "Fetching address..." : location}
+              onChange={(e) => setLocation(e.target.value)}
+              disabled={locationLoading}
+              required
+            />
+            <button 
+              type="button" 
+              className="location-btn"
+              onClick={handleGetCurrentLocation}
+              disabled={locationLoading}
+              title="Get My Current Location"
+            >
+              {locationLoading ? "⏳" : "📍"}
+            </button>
+          </div>
+          {coords.lat && <span className="location-success">Location captured successfully!</span>}
         </div>
 
-        {/* Available For */}
         <div className="form-group">
           <label>Available For</label>
           <div className="checkbox-grid">
             {["family", "boys", "girls"].map((type) => (
-              <label key={type}>
+              <label key={type} className="checkbox-pill-label">
                 <input
                   type="checkbox"
+                  className="hidden-checkbox"
                   checked={availableFor.includes(type)}
                   onChange={() => toggleAvailableFor(type)}
                 />
-                {type.charAt(0).toUpperCase() + type.slice(1)}
+                <span className="pill-text">
+                  {type.charAt(0).toUpperCase() + type.slice(1)}
+                </span>
               </label>
             ))}
           </div>
         </div>
 
-        {/* Toggle Button */}
         <div className="form-group">
           <label className="toggle-label">
-            <span>Room is available now</span>
-
+            <span className="toggle-text">Room is available now</span>
             <div className="toggle-switch">
               <input
                 type="checkbox"
@@ -195,7 +221,7 @@ const AddRoom = () => {
         </div>
 
         {!availableNow && (
-          <div className="form-group">
+          <div className="form-group fade-in">
             <label>Available From</label>
             <input
               type="date"
@@ -211,6 +237,7 @@ const AddRoom = () => {
           <input
             type="file"
             accept="image/*"
+            className="file-input"
             onChange={(e) => {
               const file = e.target.files[0];
               setImageFile(file);
@@ -220,12 +247,15 @@ const AddRoom = () => {
             }}
             required
           />
-
-          {imagePreview && <img src={imagePreview} alt="Preview" />}
+          {imagePreview && (
+            <div className="image-preview-wrapper fade-in">
+              <img src={imagePreview} alt="Preview" className="image-preview" />
+            </div>
+          )}
         </div>
 
-        <button disabled={loading}>
-          {loading ? "Saving..." : "Publish Room"}
+        <button type="submit" className="submit-btn" disabled={loading}>
+          {loading ? "Saving Details..." : "Publish Room"}
         </button>
       </form>
     </div>
