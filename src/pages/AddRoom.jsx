@@ -1,20 +1,20 @@
 import { useState } from "react";
-// import { db } from "../firebase/firebaseConfig"; // Uncomment in your actual code
-// import { addDoc, collection } from "firebase/firestore"; // Uncomment in your actual code
-// import { useAuth } from "../context/AuthContext"; // Uncomment in your actual code
-// import { useNavigate } from "react-router-dom"; // Uncomment in your actual code
+import { db } from "../firebase/firebaseConfig";
+import { addDoc, collection } from "firebase/firestore";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import imageCompression from "browser-image-compression";
 import "./AddRoom.css";
 
 const AddRoom = () => {
-  // const { user } = useAuth(); // Uncomment in your actual code
-  // const navigate = useNavigate(); // Uncomment in your actual code
+  const { user } = useAuth();
+  const navigate = useNavigate();
 
   const [title, setTitle] = useState("");
   const [rent, setRent] = useState("");
   const [location, setLocation] = useState("");
   const [coords, setCoords] = useState({ lat: null, lng: null });
-  const [locationLoading, setLocationLoading] = useState(false);
+  const [locationLoading, setLocationLoading] = useState(false); // New loading state for location
 
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
@@ -32,6 +32,7 @@ const AddRoom = () => {
     );
   };
 
+  // Get Location & Auto-Fill Address
   const handleGetCurrentLocation = () => {
     if (!navigator.geolocation) {
       alert("Geolocation is not supported by your browser");
@@ -46,15 +47,17 @@ const AddRoom = () => {
         setCoords({ lat, lng });
 
         try {
+          // Reverse Geocoding using OpenStreetMap (Free API)
           const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
           const data = await response.json();
           
           if (data && data.display_name) {
+            // Address format karke set karna
             const addressParts = [
               data.address.suburb || data.address.neighbourhood,
               data.address.city || data.address.town || data.address.village,
               data.address.state
-            ].filter(Boolean); 
+            ].filter(Boolean); // Filter out undefined/null parts
             
             setLocation(addressParts.join(", ") || data.display_name);
           }
@@ -107,7 +110,6 @@ const AddRoom = () => {
         });
       }
 
-      /* Uncomment this block when connecting to Firebase
       await addDoc(collection(db, "rooms"), {
         title,
         rent: Number(rent),
@@ -122,10 +124,9 @@ const AddRoom = () => {
         availableFor,
         createdAt: new Date(),
       });
-      */
 
       alert("Room listed successfully 🎉");
-      // navigate("/dashboard"); // Uncomment in your actual code
+      navigate("/dashboard");
     } catch (err) {
       alert(err.message);
     } finally {
@@ -144,7 +145,6 @@ const AddRoom = () => {
         <div className="form-group">
           <label>Room Title</label>
           <input
-            type="text"
             placeholder="e.g. Fully furnished room near metro"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -163,11 +163,11 @@ const AddRoom = () => {
           />
         </div>
 
+        {/* Updated Location Field */}
         <div className="form-group">
           <label>Location</label>
           <div className="location-input-wrapper">
             <input
-              type="text"
               placeholder="e.g. Andheri East, Mumbai"
               value={locationLoading ? "Fetching address..." : location}
               onChange={(e) => setLocation(e.target.value)}
@@ -184,23 +184,20 @@ const AddRoom = () => {
               {locationLoading ? "⏳" : "📍"}
             </button>
           </div>
-          {coords.lat && <span className="location-success">Location captured successfully!</span>}
+          {coords.lat && <span className="location-success">Address and Map Coordinates captured!</span>}
         </div>
 
         <div className="form-group">
           <label>Available For</label>
           <div className="checkbox-grid">
             {["family", "boys", "girls"].map((type) => (
-              <label key={type} className="checkbox-pill-label">
+              <label key={type}>
                 <input
                   type="checkbox"
-                  className="hidden-checkbox"
                   checked={availableFor.includes(type)}
                   onChange={() => toggleAvailableFor(type)}
                 />
-                <span className="pill-text">
-                  {type.charAt(0).toUpperCase() + type.slice(1)}
-                </span>
+                {type.charAt(0).toUpperCase() + type.slice(1)}
               </label>
             ))}
           </div>
@@ -208,7 +205,7 @@ const AddRoom = () => {
 
         <div className="form-group">
           <label className="toggle-label">
-            <span className="toggle-text">Room is available now</span>
+            <span>Room is available now</span>
             <div className="toggle-switch">
               <input
                 type="checkbox"
@@ -221,7 +218,7 @@ const AddRoom = () => {
         </div>
 
         {!availableNow && (
-          <div className="form-group fade-in">
+          <div className="form-group">
             <label>Available From</label>
             <input
               type="date"
@@ -237,7 +234,6 @@ const AddRoom = () => {
           <input
             type="file"
             accept="image/*"
-            className="file-input"
             onChange={(e) => {
               const file = e.target.files[0];
               setImageFile(file);
@@ -247,15 +243,11 @@ const AddRoom = () => {
             }}
             required
           />
-          {imagePreview && (
-            <div className="image-preview-wrapper fade-in">
-              <img src={imagePreview} alt="Preview" className="image-preview" />
-            </div>
-          )}
+          {imagePreview && <img src={imagePreview} alt="Preview" className="image-preview" />}
         </div>
 
-        <button type="submit" className="submit-btn" disabled={loading}>
-          {loading ? "Saving Details..." : "Publish Room"}
+        <button className="submit-btn" disabled={loading}>
+          {loading ? "Saving..." : "Publish Room"}
         </button>
       </form>
     </div>
