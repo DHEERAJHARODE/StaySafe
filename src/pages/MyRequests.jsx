@@ -47,12 +47,18 @@ const MyRequests = () => {
       for (let d of snap.docs) {
         const data = d.data();
         const roomSnap = await getDoc(doc(db, "rooms", data.roomId));
+        const roomData = roomSnap.data(); // Extract full room data
+        
         list.push({
           id: d.id,
           ...data,
-          roomTitle: roomSnap.data()?.title || "Room",
-          roomImage: roomSnap.data()?.image || "",
-          roomRent: roomSnap.data()?.rent || "",
+          roomTitle: roomData?.title || "Room",
+          roomImage: roomData?.image || "",
+          roomRent: roomData?.rent || "",
+          // Fetch coordinates
+          roomLat: roomData?.latitude,
+          roomLng: roomData?.longitude,
+          roomLocation: roomData?.location || ""
         });
       }
       setRequests(list);
@@ -60,6 +66,14 @@ const MyRequests = () => {
     });
     return () => unsub();
   }, [user?.uid]);
+
+  // Function to generate Google Maps URL
+  const getMapUrl = (lat, lng, locationName) => {
+    if (lat && lng) {
+      return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+    }
+    return `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(locationName)}`;
+  };
 
   if (loading) return <p className="loading">Loading your requests...</p>;
 
@@ -78,7 +92,15 @@ const MyRequests = () => {
                 {r.status === "accepted" && (
                   <div className="request-actions">
                     <Link to={`/chat/${r.roomId}`} className="chat-btn">💬 Chat Now</Link>
-                    <Link to={`/visit/${r.roomId}`} className="visit-btn">📍 Visit Property</Link>
+                    {/* Updated Visit Property Button to open Google Maps */}
+                    <a 
+                      href={getMapUrl(r.roomLat, r.roomLng, r.roomLocation)} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="visit-btn"
+                    >
+                      📍 Visit Property
+                    </a>
                   </div>
                 )}
               </div>
