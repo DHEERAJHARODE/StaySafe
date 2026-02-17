@@ -13,7 +13,6 @@ const AddRoom = () => {
   const [title, setTitle] = useState("");
   const [rent, setRent] = useState("");
   const [location, setLocation] = useState("");
-  const [coords, setCoords] = useState({ lat: null, lng: null }); // New State for Coordinates
   const [imageFile, setImageFile] = useState(null);
   const [imagePreview, setImagePreview] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -27,28 +26,6 @@ const AddRoom = () => {
       prev.includes(value)
         ? prev.filter((v) => v !== value)
         : [...prev, value]
-    );
-  };
-
-  // New Function to Get User Location
-  const handleGetCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setCoords({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
-        alert("Location fetched successfully! 📍");
-      },
-      (error) => {
-        alert("Unable to retrieve your location. Please allow location access.");
-        console.error(error);
-      }
     );
   };
 
@@ -88,13 +65,10 @@ const AddRoom = () => {
         });
       }
 
-      // Save room with coordinates
       await addDoc(collection(db, "rooms"), {
         title,
         rent: Number(rent),
         location,
-        latitude: coords.lat, // Saving Latitude
-        longitude: coords.lng, // Saving Longitude
         image: imageBase64,
         ownerId: user.uid,
         status: "available",
@@ -150,15 +124,6 @@ const AddRoom = () => {
             onChange={(e) => setLocation(e.target.value)}
             required
           />
-          {/* Button to trigger location fetch */}
-          <button 
-            type="button" 
-            onClick={handleGetCurrentLocation} 
-            style={{ marginTop: '8px', fontSize: '12px', padding: '8px' }}
-          >
-            📍 Use Current Location
-          </button>
-          {coords.lat && <span style={{fontSize: '11px', color: 'green', display: 'block', marginTop: '4px'}}>Location captured!</span>}
         </div>
 
         {/* Available For */}
