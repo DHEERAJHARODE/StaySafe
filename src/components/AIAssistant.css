@@ -1,0 +1,148 @@
+/* src/components/AIAssistant.css */
+.ai-widget-container {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 9999; /* Taaki ye har chiz ke upar dikhe */
+  font-family: inherit;
+}
+
+/* Floating Button */
+.ai-chat-button {
+  background-color: #4f46e5; /* Indigo color */
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 60px;
+  height: 60px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
+}
+
+.ai-chat-button:hover {
+  transform: scale(1.1);
+}
+
+/* Chat Window */
+.ai-chat-window {
+  position: absolute;
+  bottom: 80px; /* Button ke thoda upar */
+  right: 0;
+  width: 350px;
+  height: 500px;
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.ai-chat-header {
+  background-color: #4f46e5;
+  color: white;
+  padding: 15px;
+  font-weight: 600;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ai-close-btn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.ai-chat-body {
+  flex: 1;
+  padding: 15px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  background-color: #f9fafb;
+}
+
+.ai-message {
+  max-width: 80%;
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  line-height: 1.4;
+  word-wrap: break-word;
+}
+
+.ai-message.user {
+  align-self: flex-end;
+  background-color: #4f46e5;
+  color: white;
+  border-bottom-right-radius: 2px;
+}
+
+.ai-message.bot {
+  align-self: flex-start;
+  background-color: #e5e7eb;
+  color: #1f2937;
+  border-bottom-left-radius: 2px;
+}
+
+.ai-typing {
+  align-self: flex-start;
+  color: #6b7280;
+  font-size: 13px;
+  font-style: italic;
+}
+
+/* Chat Footer (Input Area) */
+.ai-chat-footer {
+  display: flex;
+  padding: 12px;
+  border-top: 1px solid #e5e7eb;
+  background: white;
+  align-items: center;
+}
+
+.ai-chat-input {
+  flex: 1;
+  padding: 10px 15px;
+  border: 1px solid #d1d5db;
+  border-radius: 20px;
+  outline: none;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.ai-chat-input:focus {
+  border-color: #4f46e5;
+}
+
+.ai-send-btn {
+  background-color: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  margin-left: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+}
+
+.ai-send-btn:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}

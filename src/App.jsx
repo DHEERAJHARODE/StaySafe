@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import { getFcmToken } from "./firebase/getFcmToken";
 import "./App.css";
 import NotificationListener from "./components/NotificationListener";
+import AIAssistant from "./components/AIAssistant"; // Naya Component Import kiya
 
 function App() {
   useEffect(() => {
@@ -17,6 +18,9 @@ function App() {
       <NotificationListener />
       <Navbar />
       <AppRoutes />
+      
+      {/* Floating AI Assistant - Ye globally float karega */}
+      <AIAssistant />
     </>
   );
 }
