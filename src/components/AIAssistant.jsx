@@ -4,16 +4,17 @@ import { GoogleGenerativeAI, SchemaType } from '@google/generative-ai';
 import { FaRobot, FaPaperPlane, FaTimes, FaCommentDots } from 'react-icons/fa';
 import './AIAssistant.css';
 
-// .env se API Key fetch kar rahe hain
 const apiKey = import.meta.env.VITE_GEMINI_API_KEY;
-
-// API initialize kar rahe hain (agar key hai tabhi)
 const genAI = apiKey ? new GoogleGenerativeAI(apiKey) : null;
 
 const AIAssistant = () => {
   const [isOpen, setIsOpen] = useState(false);
+  // Default pehla message English me set kiya gaya hai
   const [messages, setMessages] = useState([
-    { text: "Namaste! Main aapka AI Assistant hu. Main aapko pages par le ja sakta hu ya service request raise karne me madad kar sakta hu.", sender: 'bot' }
+    { 
+      text: "Hello! I am your AI Assistant. I can help you navigate pages or raise a service request. How can I help you today?", 
+      sender: 'bot'
+    }
   ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -21,7 +22,7 @@ const AIAssistant = () => {
   const navigate = useNavigate();
   const chatBodyRef = useRef(null);
 
-  // Naya message aane par auto-scroll down karne ke liye
+  // Auto-scroll to bottom
   useEffect(() => {
     if (chatBodyRef.current) {
       chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight;
@@ -31,10 +32,9 @@ const AIAssistant = () => {
   const handleSend = async () => {
     if (!input.trim() || isLoading) return;
 
-    // CHECK 1: Agar API key set nahi hai toh error message dikhaye
     if (!apiKey) {
       setMessages((prev) => [...prev, { 
-        text: "Error: VITE_GEMINI_API_KEY nahi mili. Kripya apni .env file check karein aur server (npm run dev) restart karein.", 
+        text: "Error: VITE_GEMINI_API_KEY is missing.", 
         sender: 'bot' 
       }]);
       return;
@@ -46,12 +46,10 @@ const AIAssistant = () => {
     setIsLoading(true);
 
     try {
-      // ✅ Naya aur stable tarika AI ko define karne ka
       const model = genAI.getGenerativeModel({ 
-        model: "gemini-2.5-flash", // Ye stable hai latest version me
+        model: "gemini-2.5-flash", 
         generationConfig: {
           responseMimeType: "application/json",
-          // Schema define karne se AI hamesha yahi format dega, fail nahi hoga
           responseSchema: {
             type: SchemaType.OBJECT,
             properties: {
@@ -61,19 +59,19 @@ const AIAssistant = () => {
               },
               route: {
                 type: SchemaType.STRING,
-                description: "The React route to navigate to (e.g. /contact, /login, /dashboard). Return empty string if not REDIRECT.",
+                description: "The React route to navigate to. Return empty string if not REDIRECT.",
               },
               details: {
                 type: SchemaType.OBJECT,
                 properties: {
                   issue: { type: SchemaType.STRING },
                   room: { type: SchemaType.STRING }
-                },
-                description: "Details of the service request. Return empty object if not RAISE_REQUEST."
+                }
               },
               message: {
                 type: SchemaType.STRING,
-                description: "The reply message to the user in Hinglish/Hindi."
+                // AI ko schema me bhi bata diya ki same language use karni hai
+                description: "The reply message to the user, strictly written in the exact same language (e.g., English, Hindi, or Hinglish) that the user used in their last message." 
               }
             },
             required: ["action", "route", "details", "message"]
@@ -85,7 +83,7 @@ const AIAssistant = () => {
         You are a smart AI Assistant for a room rental platform.
         You must help users, navigate them, or take service requests.
         
-        Available Routes in the React app:
+        Available Routes:
         - Home: /
         - Login: /login
         - Register: /register
@@ -93,7 +91,7 @@ const AIAssistant = () => {
         - All Rooms: /rooms
         - My Rooms: /my-rooms
         - Add Room: /add-room
-        - Inbox / Chat: /inbox
+        - Inbox: /inbox
         - Profile: /profile
         - Booking Requests: /booking-requests
         - My Requests: /my-requests
@@ -101,8 +99,9 @@ const AIAssistant = () => {
 
         Rules:
         1. If user asks to go to a page, return action="REDIRECT" with the correct route.
-        2. If user mentions a problem (e.g., 'AC is not working'), ask for details if missing. When complete, return action="RAISE_REQUEST".
-        3. For normal conversation (e.g., 'hey', 'hello', 'who are you'), use action="CHAT".
+        2. If user mentions a problem, ask for details. When complete, return action="RAISE_REQUEST".
+        3. For normal conversation, use action="CHAT".
+        4. CRITICAL RULE: Automatically detect the language of the User's message. You MUST reply in that EXACT SAME language (English, Hindi script, or Hinglish).
       `;
 
       const chatHistory = messages.map(m => `${m.sender}: ${m.text}`).join("\n");
@@ -110,18 +109,14 @@ const AIAssistant = () => {
       
       const result = await model.generateContent(fullPrompt);
       const responseText = result.response.text();
-      
-      // Ab ye securely parse ho jayega
       const aiResponse = JSON.parse(responseText);
 
-      // AI ke 'action' ke hisaab se react karna
       if (aiResponse.action === 'CHAT') {
         setMessages((prev) => [...prev, { text: aiResponse.message, sender: 'bot' }]);
       } 
       else if (aiResponse.action === 'REDIRECT') {
         setMessages((prev) => [...prev, { text: aiResponse.message, sender: 'bot' }]);
         setTimeout(() => {
-          // Check ki kahi AI ne galti se route me kuch aur to nahi bheja
           if (aiResponse.route && aiResponse.route.startsWith('/')) {
              navigate(aiResponse.route);
           }
@@ -134,7 +129,7 @@ const AIAssistant = () => {
 
     } catch (error) {
       console.error("AI Assistant Error:", error);
-      setMessages((prev) => [...prev, { text: "Network error aayi hai. Kripya apna Browser Console (F12) check karein detailed error ke liye.", sender: 'bot' }]);
+      setMessages((prev) => [...prev, { text: "Network error. Please try again.", sender: 'bot' }]);
     } finally {
       setIsLoading(false);
     }
@@ -142,10 +137,8 @@ const AIAssistant = () => {
 
   return (
     <div className="ai-widget-container">
-      {/* CHAT WINDOW */}
       {isOpen && (
         <div className="ai-chat-window">
-          {/* Header */}
           <div className="ai-chat-header">
             <span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <FaRobot size={22} /> AI Support
@@ -155,35 +148,36 @@ const AIAssistant = () => {
             </button>
           </div>
           
-          {/* Messages Body */}
           <div className="ai-chat-body" ref={chatBodyRef}>
             {messages.map((msg, index) => (
               <div key={index} className={`ai-message ${msg.sender}`}>
                 {msg.text}
               </div>
             ))}
-            {isLoading && <div className="ai-typing">AI type kar raha hai...</div>}
+            {isLoading && <div className="ai-typing">AI is typing...</div>}
           </div>
 
-          {/* Input Section */}
           <div className="ai-chat-footer">
             <input 
               type="text" 
               className="ai-chat-input" 
-              placeholder="Message type karein..."
+              placeholder="Type a message..."
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
               disabled={isLoading}
             />
-            <button className="ai-send-btn" onClick={handleSend} disabled={isLoading || !input.trim()}>
+            <button 
+              className="ai-send-btn" 
+              onClick={handleSend} 
+              disabled={isLoading || !input.trim()}
+            >
               <FaPaperPlane />
             </button>
           </div>
         </div>
       )}
 
-      {/* FLOATING BUTTON */}
       {!isOpen && (
         <button className="ai-chat-button" onClick={() => setIsOpen(true)}>
           <FaCommentDots />
