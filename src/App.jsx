@@ -4,14 +4,18 @@ import Navbar from "./components/Navbar";
 import { getFcmToken } from "./firebase/getFcmToken";
 import "./App.css";
 import NotificationListener from "./components/NotificationListener";
-import AIAssistant from "./components/AIAssistant"; // Naya Component Import kiya
+import AIAssistant from "./components/AIAssistant";
+import { useAuth } from "./context/AuthContext"; // 1. AuthContext import kiya
 
 function App() {
+  const { user } = useAuth(); // 2. Logged-in user ka data get kiya
+
   useEffect(() => {
-    // Abhi test ke liye static user id
-    // Login system hone par yahan user.uid pass karna
-    getFcmToken("test-user-123");
-  }, []);
+    // 3. Agar user login hai, tabhi uska FCM token get karo
+    if (user && user.uid) {
+      getFcmToken(user.uid);
+    }
+  }, [user]); // user state change hone par ye effect run hoga
 
   return (
     <>
@@ -19,8 +23,8 @@ function App() {
       <Navbar />
       <AppRoutes />
       
-      {/* Floating AI Assistant - Ye globally float karega */}
-      <AIAssistant />
+      {/* 4. Floating AI Assistant sirf tabhi dikhega jab 'user' exist karta ho (logged in ho) */}
+      {user && <AIAssistant />}
     </>
   );
 }
