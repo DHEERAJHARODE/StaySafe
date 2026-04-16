@@ -65,7 +65,7 @@ const Premium = () => {
           });
 
           alert("🎉 Payment Successful! Redirecting to StaySafe Pro Portal...");
-          window.location.href = "http://localhost:5174/dashboard"; 
+          window.location.href = "https://staysafe-pro.vercel.app"; 
           
         } catch (error) {
           console.error("Error upgrading to premium:", error);
