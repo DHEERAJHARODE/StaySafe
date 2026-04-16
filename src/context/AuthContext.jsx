@@ -5,7 +5,7 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth, googleProvider, db } from "../firebase/firebaseConfig";
-import { doc, getDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext();
@@ -53,19 +53,43 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
-  // ✅ GOOGLE SIGN IN (UNCHANGED LOGIC)
+  // ✅ GOOGLE SIGN IN (Fixed for Premium Fields)
   const signInWithGoogle = async (navigate) => {
-    const result = await signInWithPopup(auth, googleProvider);
-    const user = result.user;
-    const isNewUser = result._tokenResponse?.isNewUser;
+    try {
+      const result = await signInWithPopup(auth, googleProvider);
+      const user = result.user;
 
-    const userRef = doc(db, "users", user.uid);
-    const snap = await getDoc(userRef);
+      const userRef = doc(db, "users", user.uid);
+      const userDoc = await getDoc(userRef);
 
-    if (isNewUser || !snap.exists()) {
-      navigate("/choose-role"); // 👈 NEW GOOGLE USER
-    } else {
-      navigate("/dashboard"); // 👈 EXISTING USER
+      if (!userDoc.exists()) {
+        // 1. Agar User bilkul naya hai
+        await setDoc(userRef, {
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          role: "room-seeker", // Default role
+          isPremium: false,    // Premium Status
+          premiumExpiry: null, // Expiry Date
+          createdAt: new Date(),
+        });
+        navigate("/choose-role");
+      } else {
+        // 2. Agar User pehle se hai
+        const data = userDoc.data();
+        if (data.isPremium === undefined || data.premiumExpiry === undefined) {
+          await setDoc(userRef, {
+            isPremium: data.isPremium ?? false,
+            premiumExpiry: data.premiumExpiry ?? null
+          }, { merge: true });
+        }
+        // Agar new user tha aur seedha dashboard aaya, role change karke
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      console.error("Google Sign-In Error:", error);
+      alert("Login failed: " + error.message);
     }
   };
 

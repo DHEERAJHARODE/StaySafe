@@ -18,109 +18,36 @@ import ForgotPassword from "../pages/ForgotPassword";
 import VerifyEmail from "../pages/VerifyEmail";
 import Chat from "../pages/Chat";
 import Inbox from "../pages/Inbox";
-import PrivacyPolicy from "../pages/PrivacyPolicy"; // Updated Import
-import ContactUs from "../pages/ContactUs"; // Updated Import
-import Terms from "../pages/Terms"; // New Import
+import PrivacyPolicy from "../pages/PrivacyPolicy";
+import ContactUs from "../pages/ContactUs";
+import Terms from "../pages/Terms";
+import Premium from "../pages/Premium"; // ✅ Naya Premium page import kiya hai
 
 const AppRoutes = () => {
   return (
     <Routes>
       {/* ================= PUBLIC ROUTES ================= */}
       <Route path="/" element={<Home />} />
-      <Route
-        path="/login"
-        element={
-          <PublicRoute>
-            <Login />
-          </PublicRoute>
-        }
-      />
-      <Route
-        path="/register"
-        element={
-          <PublicRoute>
-            <Register />
-          </PublicRoute>
-        }
-      />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/login" element={<PublicRoute><Login /></PublicRoute>} />
+      <Route path="/register" element={<PublicRoute><Register /></PublicRoute>} />
+      <Route path="/forgot-password" element={<PublicRoute><ForgotPassword /></PublicRoute>} />
       <Route path="/verify-email" element={<VerifyEmail />} />
 
       {/* ================= PROTECTED ROUTES ================= */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/add-room"
-        element={
-          <ProtectedRoute>
-            <AddRoom />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/my-rooms"
-        element={
-          <ProtectedRoute>
-            <MyRooms />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/edit-room/:id"
-        element={
-          <ProtectedRoute>
-            <EditRoom />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/booking-requests"
-        element={
-          <ProtectedRoute>
-            <BookingRequests />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/profile"
-        element={
-          <ProtectedRoute>
-            <Profile />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/my-requests"
-        element={
-          <ProtectedRoute>
-            <MyRequests />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+      <Route path="/add-room" element={<ProtectedRoute><AddRoom /></ProtectedRoute>} />
+      <Route path="/my-rooms" element={<ProtectedRoute><MyRooms /></ProtectedRoute>} />
+      <Route path="/edit-room/:id" element={<ProtectedRoute><EditRoom /></ProtectedRoute>} />
+      <Route path="/booking-requests" element={<ProtectedRoute><BookingRequests /></ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+      <Route path="/my-requests" element={<ProtectedRoute><MyRequests /></ProtectedRoute>} />
       
       {/* MESSAGING SYSTEM */}
-      <Route
-        path="/inbox"
-        element={
-          <ProtectedRoute>
-            <Inbox />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/chat/:roomId"
-        element={
-          <ProtectedRoute>
-            <Chat />
-          </ProtectedRoute>
-        }
-      />
+      <Route path="/inbox" element={<ProtectedRoute><Inbox /></ProtectedRoute>} />
+      <Route path="/chat/:roomId" element={<ProtectedRoute><Chat /></ProtectedRoute>} />
+
+      {/* ✅ PREMIUM ROUTE (Naya route add kiya) */}
+      <Route path="/premium" element={<ProtectedRoute><Premium /></ProtectedRoute>} />
 
       {/* ================= GENERAL & LEGAL ROUTES ================= */}
       <Route path="/rooms" element={<RoomsList />} />
@@ -131,9 +58,6 @@ const AppRoutes = () => {
       <Route path="/contact" element={<ContactUs />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
       <Route path="/terms" element={<Terms />} />
-
-      {/* 404 Fallback - Redirect to Home or a Custom NotFound Page */}
-      <Route path="*" element={<Home />} /> 
     </Routes>
   );
 };

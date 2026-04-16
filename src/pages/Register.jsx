@@ -33,10 +33,12 @@ const Register = () => {
       // ✅ Send verification email
       await sendEmailVerification(res.user);
 
-      // ✅ Save user
+      // ✅ Save user (Added premium fields here)
       await setDoc(doc(db, "users", res.user.uid), {
         email,
         role,
+        isPremium: false,        // <-- Naya field: Default premium false rahega
+        premiumExpiry: null,     // <-- Naya field: Expiry date abhi null rahegi
         createdAt: new Date(),
       });
 

@@ -17,11 +17,12 @@ const ChooseRole = () => {
     try {
       setLoading(true);
 
+      // ✅ Yahan merge: true laga diya gaya hai taaki purana data (isPremium) delete na ho
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
         role,
         createdAt: serverTimestamp(),
-      });
+      }, { merge: true });
 
       navigate("/dashboard");
     } catch (err) {
