@@ -37,7 +37,7 @@ const Premium = () => {
 
     // ✅ AGAR PEHLE SE PREMIUM HAI TOH SEEDHA SSP PAR BHEJO BINA PAYMENT KE
     if (isAlreadyPremium) {
-      window.location.href = "http://localhost:5174/dashboard"; // Seedha dashboard bhejo
+      window.location.href = "https://staysafe-pro.vercel.app"; // Seedha dashboard bhejo
       return;
     }
 
