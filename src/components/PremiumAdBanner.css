@@ -10,6 +10,31 @@
   font-family: 'Inter', sans-serif;
 }
 
+/* ✅ Close Button Styling */
+.ad-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.ad-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: rotate(90deg); /* Click karne se pehle halka sa ghomega */
+}
+
 .premium-ad-content {
   padding: 32px;
   flex: 1;

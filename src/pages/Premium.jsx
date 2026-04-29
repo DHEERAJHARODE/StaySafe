@@ -64,7 +64,6 @@ const Premium = () => {
             premiumExpiry: expiryDate
           });
 
-          alert("🎉 Payment Successful! Redirecting to StaySafe Pro Portal...");
           navigate("/ssp-dashboard"); 
           
         } catch (error) {
