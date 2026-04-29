@@ -37,7 +37,7 @@ const Premium = () => {
 
     // ✅ AGAR PEHLE SE PREMIUM HAI TOH SEEDHA SSP PAR BHEJO BINA PAYMENT KE
     if (isAlreadyPremium) {
-      window.location.href = "https://staysafe-pro.vercel.app"; // Seedha dashboard bhejo
+      navigate("/ssp-dashboard");
       return;
     }
 
@@ -65,7 +65,7 @@ const Premium = () => {
           });
 
           alert("🎉 Payment Successful! Redirecting to StaySafe Pro Portal...");
-          window.location.href = "https://staysafe-pro.vercel.app"; 
+          navigate("/ssp-dashboard"); 
           
         } catch (error) {
           console.error("Error upgrading to premium:", error);

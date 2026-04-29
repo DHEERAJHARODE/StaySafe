@@ -3,6 +3,7 @@ import { useAuth } from "../context/AuthContext";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
 import { useNavigate } from "react-router-dom";
+import OwnerPremiumAd from "../components/OwnerPremiumAd"; // ✅ Naya Ad Import Kiya
 import "./Dashboard.css";
 
 const Dashboard = () => {
@@ -63,9 +64,13 @@ const OwnerDashboard = () => {
     <>
       <h3 className="role-title">Owner Panel</h3>
 
+      {/* ✅ VIP OWNER AD YAHAN LAGA DIYA */}
+      {/* Ye sirf Non-Premium owners ko dikhega */}
+      <OwnerPremiumAd />
+
       <div className="dashboard-grid">
         <Card
-          title="👤 My Profile"
+          title="🛡️ My Profile"
           desc="View & edit your profile"
           onClick={() => navigate("/profile")}
         />
@@ -83,7 +88,7 @@ const OwnerDashboard = () => {
         />
 
         <Card
-          title="📩 Booking Requests"
+          title="🔔 Booking Requests"
           desc="Approve or reject requests"
           onClick={() => navigate("/booking-requests")}
         />
@@ -103,7 +108,7 @@ const SeekerDashboard = () => {
 
       <div className="dashboard-grid">
         <Card
-          title="👤 My Profile"
+          title="🛡️ My Profile"
           desc="Edit personal information"
           onClick={() => navigate("/profile")}
         />
@@ -115,7 +120,7 @@ const SeekerDashboard = () => {
         />
 
         <Card
-          title="📨 My Requests"
+          title="📥 My Requests"
           desc="Track booking requests"
           onClick={() => navigate("/my-requests")}
         />

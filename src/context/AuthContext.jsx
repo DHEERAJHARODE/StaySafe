@@ -5,36 +5,54 @@ import {
   signInWithPopup,
 } from "firebase/auth";
 import { auth, googleProvider, db } from "../firebase/firebaseConfig";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, onSnapshot } from "firebase/firestore"; // ✅ onSnapshot import kiya
 import { useNavigate, useLocation } from "react-router-dom";
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
+  const [isPremium, setIsPremium] = useState(false); // ✅ Premium status track karne ke liye
   const [loading, setLoading] = useState(true);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
+    let unsubscribeSnapshot = null; // ✅ Live data listener ko control karne ke liye
+
     const unsub = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
-      setLoading(false);
 
-      // 🛑 NOT LOGGED IN → DO NOTHING
-      if (!currentUser) return;
-
-      // 🚨 EMAIL NOT VERIFIED
-      if (!currentUser.emailVerified) {
-        // already on verify page? then don't loop
-        if (location.pathname !== "/verify-email") {
-          navigate("/verify-email", { replace: true });
-        }
+      // 🛑 NOT LOGGED IN → STOP LISTENING & DO NOTHING
+      if (!currentUser) {
+        setIsPremium(false);
+        setLoading(false);
+        if (unsubscribeSnapshot) unsubscribeSnapshot();
         return;
       }
 
-      // ✅ EMAIL VERIFIED → ALLOW NORMAL FLOW
+      // 🚨 EMAIL NOT VERIFIED
+      if (!currentUser.emailVerified) {
+        if (location.pathname !== "/verify-email") {
+          navigate("/verify-email", { replace: true });
+        }
+        setLoading(false);
+        return;
+      }
+
+      // ✅ EMAIL VERIFIED → ATTACH REAL-TIME LISTENER FOR PREMIUM STATUS
+      const userRef = doc(db, "users", currentUser.uid);
+      unsubscribeSnapshot = onSnapshot(userRef, (userSnap) => {
+        if (userSnap.exists()) {
+          setIsPremium(userSnap.data().isPremium || false);
+        } else {
+          setIsPremium(false);
+        }
+        setLoading(false); // Data aane ke baad hi app ko aage badhne do
+      });
+
+      // ✅ LOGGED IN & VERIFIED USER ROUTING
       if (
         currentUser.emailVerified &&
         (location.pathname === "/login" ||
@@ -45,7 +63,10 @@ export const AuthProvider = ({ children }) => {
       }
     });
 
-    return () => unsub();
+    return () => {
+      unsub();
+      if (unsubscribeSnapshot) unsubscribeSnapshot(); // Cleanup
+    };
   }, [navigate, location.pathname]);
 
   const logout = async () => {
@@ -95,7 +116,8 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, logout, signInWithGoogle }}
+      // ✅ Yahan isPremium pass karna bahut zaroori hai
+      value={{ user, loading, isPremium, logout, signInWithGoogle }} 
     >
       {!loading && children}
     </AuthContext.Provider>

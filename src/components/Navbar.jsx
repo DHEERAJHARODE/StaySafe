@@ -24,12 +24,13 @@ import {
   FiGrid,
   FiMail,
   FiSettings,
-  FiBell
+  FiBell,
+  FiFileText
 } from "react-icons/fi";
 import "./Navbar.css";
 
 const Navbar = () => {
-  const { user, logout } = useAuth();
+  const { user, logout, isPremium } = useAuth();
   const navigate = useNavigate();
 
   // States
@@ -164,6 +165,14 @@ const Navbar = () => {
                 <NavLink to="/dashboard" className={navClass}>
                   Dashboard
                 </NavLink>
+
+                {/* ✅ Premium Owner Agreements Link (Desktop) */}
+                {profile?.role === "owner" && isPremium && (
+                  <NavLink to="/ssp-dashboard" className={navClass}>
+                    <FiFileText className="nav-icon-sm" /> Agreements
+                    <span className="link-badge pro-badge">PRO</span>
+                  </NavLink>
+                )}
               </>
             ) : null}
           </div>
@@ -312,6 +321,14 @@ const Navbar = () => {
               <NavLink to="/dashboard" className={sideClass} onClick={() => setMobileOpen(false)}>
                 <FiGrid /> Dashboard
               </NavLink>
+
+              {/* ✅ Premium Owner Agreements Link (Mobile) */}
+              {profile?.role === "owner" && isPremium && (
+                <NavLink to="/ssp-dashboard" className={sideClass} onClick={() => setMobileOpen(false)}>
+                  <FiFileText /> Agreements
+                  <span className="sidebar-badge pro-badge">PRO</span>
+                </NavLink>
+              )}
 
               <div className="sidebar-divider">Other</div>
 

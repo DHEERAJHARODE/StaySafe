@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 
 // Modular Components
 import Footer from "../components/Footer"; 
+import PremiumAdBanner from "../components/PremiumAdBanner"; // ✅ Ad Banner Import Kiya
 import "./Home.css";
 
 const Home = () => {
@@ -58,6 +59,11 @@ const Home = () => {
       {/* ================= FEATURED PROPERTIES ================= */}
       <section className="rooms-section">
         <div className="container">
+          
+          {/* ✅ PREMIUM AD BANNER YAHAN LAGA DIYA */}
+          {/* Agar user premium hoga, toh ye apne aap hide ho jayega */}
+          <PremiumAdBanner />
+
           <div className="section-title-area">
             <div>
               <span className="sub-title">Handpicked for you</span>

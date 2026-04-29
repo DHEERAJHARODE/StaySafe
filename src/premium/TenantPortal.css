@@ -1,0 +1,427 @@
+/* src/pages/TenantPortal.css */
+
+/* 1. Main Background */
+
+/* =========================================
+   🚨 FIX: SVGs OVERLAPPING ON LEFT SIDE 🚨
+   ========================================= */
+
+/* Yeh sabhi SVGs ko unki sahi jagah (relative/static) par force karega */
+.portal-wrapper svg {
+  position: static !important; 
+  left: auto !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  float: none !important;
+}
+
+/* Input ke andar wale icons ka space fix */
+.input-icon {
+  margin-right: 12px !important;
+  flex-shrink: 0 !important;
+  min-width: 18px !important;
+  display: block !important;
+}
+
+/* Sabse upar wala bada Shield icon center karne ke liye */
+.portal-icon {
+  display: block !important;
+  margin: 0 auto 24px auto !important;
+}
+
+/* Headings aur Buttons ke andar wale icons ke beech thoda space */
+.form-section-title svg, 
+.agreement-info h2 svg,
+.start-camera-btn svg {
+  margin-right: 8px !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+.portal-wrapper {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%);
+  font-family: 'Inter', 'Segoe UI', sans-serif;
+  padding: 20px;
+}
+
+/* 2. Card Container */
+.portal-card {
+  background: #ffffff;
+  width: 100%;
+  max-width: 800px; /* Increased width for a better form layout */
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1), 0 0px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid #f1f5f9;
+}
+
+/* 3. Headings & Icons */
+.portal-icon {
+  color: #3b82f6; 
+  margin-bottom: 24px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.portal-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 8px;
+  text-align: center;
+  letter-spacing: -0.5px;
+}
+
+.portal-subtitle {
+  color: #64748b;
+  margin-bottom: 40px;
+  font-size: 16px;
+  text-align: center;
+}
+
+/* 4. Input Fields (Key Entry) */
+.key-input-container {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.key-input {
+  width: 100%;
+  padding: 16px;
+  font-size: 28px;
+  letter-spacing: 8px;
+  text-align: center;
+  border: 2px solid #e2e8f0;
+  border-radius: 16px;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  color: #1e293b;
+  margin-bottom: 24px;
+  background: #f8fafc;
+  transition: all 0.3s ease;
+}
+
+.key-input:focus {
+  border-color: #3b82f6;
+  background: #ffffff;
+  outline: none;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15);
+}
+
+.key-input::placeholder {
+  letter-spacing: normal;
+  font-size: 16px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+/* 5. Buttons */
+.verify-btn {
+  width: 100%;
+  padding: 16px;
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+}
+
+.verify-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+}
+
+.verify-btn:disabled {
+  background: #94a3b8;
+  box-shadow: none;
+  cursor: not-allowed;
+}
+
+/* 6. Agreement Details Section */
+.agreement-info {
+  background: linear-gradient(to right, #eff6ff, #f8fafc);
+  padding: 24px;
+  border-radius: 16px;
+  margin-bottom: 30px;
+  border: 1px solid #bfdbfe;
+  position: relative;
+  overflow: hidden;
+}
+
+.agreement-info::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 6px; height: 100%;
+  background: #3b82f6;
+}
+
+.agreement-info h2 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: #1e3a8a;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 12px;
+}
+
+.info-badge {
+  background: #ffffff;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+/* 7. Terms List */
+.terms-section {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 12px;
+  margin-top: 16px;
+  border: 1px solid #e2e8f0;
+  max-height: 150px;
+  overflow-y: auto;
+}
+
+.terms-section p.terms-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #334155;
+  margin: 0 0 10px 0;
+}
+
+.terms-section ul {
+  padding-left: 20px;
+  color: #475569;
+  font-size: 14px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* 8. Form Layout & Inputs */
+.form-section-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 30px 0 15px 0;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #f1f5f9;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+@media (min-width: 768px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .col-span-2 {
+    grid-column: span 2;
+  }
+}
+
+.input-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-wrapper label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 6px;
+}
+
+.tenant-input-box {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 12px;
+  padding: 0 16px;
+  transition: all 0.2s ease;
+}
+
+.tenant-input-box:focus-within {
+  background: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+}
+
+.input-icon {
+  color: #94a3b8;
+  margin-right: 12px;
+}
+
+.tenant-input {
+  width: 100%;
+  padding: 14px 0;
+  border: none;
+  background: transparent;
+  font-size: 15px;
+  color: #1e293b;
+  outline: none;
+}
+
+/* 9. File Uploads & Camera Section */
+.upload-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  padding: 20px;
+  border-radius: 16px;
+}
+
+.upload-input-styled {
+  width: 100%;
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 8px;
+}
+
+.upload-input-styled::file-selector-button {
+  margin-right: 16px;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #e0e7ff;
+  color: #4338ca;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.upload-input-styled::file-selector-button:hover {
+  background: #c7d2fe;
+}
+
+.portal-camera-box {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.camera-preview-container {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  background: #000;
+  margin-top: 10px;
+}
+
+.camera-preview {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.capture-btn {
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ef4444;
+  color: white;
+  padding: 8px 24px;
+  border-radius: 30px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+}
+
+.start-camera-btn {
+  background: #1e293b;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 12px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.retake-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+/* 10. Submit Button */
+.submit-agreement-btn {
+  width: 100%;
+  padding: 18px;
+  background: #16a34a;
+  color: white;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 30px;
+  box-shadow: 0 10px 25px -5px rgba(22, 163, 74, 0.4);
+  transition: all 0.3s ease;
+}
+
+.submit-agreement-btn:hover:not(:disabled) {
+  background: #15803d;
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px -5px rgba(22, 163, 74, 0.5);
+}
+
+.submit-agreement-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 640px) {
+  .portal-wrapper { padding: 10px; }
+  .portal-card { padding: 24px 20px; border-radius: 20px; }
+  .portal-title { font-size: 24px; }
+  .key-input { font-size: 24px; padding: 12px; }
+}

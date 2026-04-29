@@ -1,0 +1,263 @@
+/* =========================================
+   ContractView.css - Final Complete Code
+   ========================================= */
+
+/* 1. Main Page Container */
+.contract-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 30px;
+  background-color: #525659; /* PDF Viewer dark background */
+  min-height: 100vh;
+}
+
+/* 2. Top Action Bar (Download Button) */
+.action-bar {
+  margin-bottom: 20px;
+}
+
+.download-btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 25px;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  cursor: pointer;
+  font-weight: 600;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  transition: background-color 0.2s;
+}
+
+.download-btn:hover {
+  background-color: #0056b3;
+}
+
+/* 3. Stamp Paper Simulation (A4 Size) */
+.stamp-paper {
+  width: 210mm;        /* Exact A4 Width */
+  min-height: 297mm;   /* Start with A4 Height */
+  height: auto;        /* Allow expansion if content is very long */
+  
+  background-color: white;
+  
+  /* Ensure stamp_paper.jpg is in your 'public' folder */
+  background-image: url('/stamp_paper.jpg'); 
+  background-size: 100% auto; /* Width fit, height auto to keep aspect ratio of header */
+  background-repeat: no-repeat;
+  background-position: top center;
+  
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  position: relative;
+  font-family: 'Hind', 'Arial', sans-serif;
+  color: #333;
+  box-sizing: border-box;
+  overflow: hidden; 
+}
+
+/* 4. Content Overlay - The textual part */
+.content-overlay {
+  /* IMPORTANT: Adjust this % to push text below the green stamp header.
+     45% is a safe starting point for standard stamp papers. */
+  padding-top: 50%; 
+  padding-left: 12%;
+  padding-right: 10%;
+  padding-bottom: 40px;
+  
+  /* Compact Font Settings */
+  font-size: 13px; 
+  line-height: 1.45;
+}
+
+/* Title Styling */
+.contract-title {
+  text-align: center;
+  text-decoration: underline;
+  font-weight: 700;
+  font-size: 20px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  color: #000;
+}
+
+.contract-body {
+  width: 100%;
+}
+
+/* 5. Information Rows (Label : Value) */
+.info-row {
+  display: flex;
+  margin-bottom: 6px; /* Reduced gap */
+  border-bottom: 1px dashed #eee;
+  padding-bottom: 2px;
+}
+
+.label {
+  font-weight: 700;
+  width: 130px; /* Fixed width for alignment */
+  color: #444;
+  font-size: 13px;
+}
+
+.value {
+  font-weight: 500;
+  color: #000;
+  flex: 1;
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid #ccc;
+  margin: 12px 0;
+}
+
+/* 6. Terms & Conditions Section (Compact) */
+.terms-section {
+  margin-top: 15px;
+}
+
+.terms-section h3 {
+  font-size: 14px;
+  text-decoration: underline;
+  margin-bottom: 8px;
+  color: #000;
+}
+
+.terms-section ol {
+  padding-left: 18px;
+  margin: 0;
+}
+
+.terms-section li {
+  margin-bottom: 4px; /* Tight spacing for list items */
+  text-align: justify;
+  font-size: 12px;    /* Smaller font for terms to save space */
+  line-height: 1.35;
+  color: #222;
+}
+
+/* 7. Signature Section */
+.signatures {
+  margin-top: 40px; /* Space above signatures */
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.sign-box {
+  text-align: center;
+  width: 40%;
+}
+
+.declaration {
+  font-size: 11px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  color: #555;
+  font-style: italic;
+}
+
+/* Signature Image Styling */
+.sign-img {
+  width: 80px;      /* Small width to save space */
+  max-height: 50px; /* Limit height */
+  object-fit: contain;
+  border-bottom: 1px solid #333;
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.sign-label {
+  font-weight: bold;
+  font-size: 12px;
+  border-top: 1px solid #ccc;
+  padding-top: 4px;
+  margin-top: 2px;
+}
+
+/* Empty box for Owner to sign manually if needed */
+.owner-placeholder {
+  height: 40px; 
+  margin-bottom: 2px;
+}
+
+/* 8. Print Adjustments (When saving as PDF/Printing) */
+@media print {
+  .action-bar { display: none; }
+  .contract-container { 
+    padding: 0; 
+    background: none; 
+    display: block;
+  }
+  .stamp-paper { 
+    box-shadow: none; 
+    margin: 0;
+    page-break-after: always;
+  }
+}
+
+/* =========================================
+   9. MOBILE RESPONSIVENESS (NEWLY ADDED)
+   ========================================= */
+@media (max-width: 768px) {
+  .contract-container {
+    padding: 10px; /* मोबाइल पर बाहर की पैडिंग कम की */
+  }
+  .stamp-paper {
+    width: 100%; /* स्क्रीन के हिसाब से सिकुड़ जाएगा */
+    min-height: 141.4vw; /* A4 पेज का रेश्यो मेंटेन रखेगा */
+  }
+  .content-overlay {
+    padding-left: 8%;
+    padding-right: 8%;
+  }
+  .label {
+    width: 100px; /* मोबाइल पर जगह बचाने के लिए चौड़ाई कम की */
+    font-size: 12px;
+  }
+  .value {
+    font-size: 12px;
+  }
+  .contract-title {
+    font-size: 16px;
+  }
+  .download-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+.stamp-paper {
+  width: 210mm;
+  min-height: 297mm;
+  height: auto;
+  background-color: white;
+  background-image: url('/stamp_paper.jpg'); 
+  background-size: 100% auto;
+  background-repeat: no-repeat;
+  background-position: top center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.3);
+  position: relative;
+  font-family: 'Hind', 'Arial', sans-serif;
+  color: #333;
+  box-sizing: border-box;
+  overflow: visible; /* 🔥 Important for PDF capture */
+}
+
+@media (max-width: 768px) {
+  .contract-container { padding: 10px; }
+  .stamp-paper {
+    width: 100%;
+    min-height: 141.4vw;
+    /* मोबाइल पर रेंडरिंग के दौरान किसी भी ट्रांसफॉर्म को रोकें */
+    transform: none !important; 
+  }
+  .content-overlay {
+    padding-top: 50%; /* स्टैम्प हेडर के लिए जगह */
+    padding-left: 8%;
+    padding-right: 8%;
+  }
+}

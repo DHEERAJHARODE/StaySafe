@@ -1,0 +1,152 @@
+.owner-premium-banner {
+  background: linear-gradient(135deg, #1e293b 0%, #312e81 100%);
+  border-radius: 20px;
+  padding: 35px;
+  margin: 0 auto 30px auto;
+  max-width: 1000px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: white;
+  box-shadow: 0 15px 35px rgba(49, 46, 129, 0.2);
+  position: relative; /* Taki close button ko position kar sakein */
+  overflow: hidden;
+  font-family: 'Inter', sans-serif;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ✅ Close Button Styling */
+.op-close-btn {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: rgba(255, 255, 255, 0.6);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+}
+
+.op-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  transform: rotate(90deg); /* Mast rotation effect */
+}
+
+.op-glow {
+  position: absolute;
+  top: -60px;
+  right: -60px;
+  width: 250px;
+  height: 250px;
+  background: radial-gradient(circle, rgba(99, 102, 241, 0.25) 0%, rgba(255,255,255,0) 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.op-content {
+  flex: 1;
+  z-index: 2;
+}
+
+.op-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(99, 102, 241, 0.2);
+  color: #c7d2fe;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  margin-bottom: 15px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
+}
+
+.op-title {
+  font-size: 26px;
+  font-weight: 800;
+  margin: 0 0 10px 0;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.op-desc {
+  font-size: 15px;
+  color: #94a3b8;
+  margin: 0 0 24px 0;
+  max-width: 550px;
+  line-height: 1.6;
+}
+
+.op-features {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.op-feature-tag {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #34d399;
+  background: rgba(52, 211, 153, 0.1);
+  padding: 8px 14px;
+  border-radius: 10px;
+}
+
+.op-action {
+  z-index: 2;
+  margin-left: 25px;
+}
+
+.op-upgrade-btn {
+  background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+  color: white;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 14px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+}
+
+.op-upgrade-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 25px rgba(79, 70, 229, 0.5);
+}
+
+@media (max-width: 768px) {
+  .owner-premium-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 30px 20px;
+  }
+  
+  .op-action {
+    margin-left: 0;
+    margin-top: 25px;
+    width: 100%;
+  }
+
+  .op-upgrade-btn {
+    width: 100%;
+  }
+
+  .op-features {
+    justify-content: center;
+  }
+}

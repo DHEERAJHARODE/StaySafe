@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { collection, onSnapshot } from "firebase/firestore";
 import { db } from "../firebase/firebaseConfig";
+import PremiumAdBanner from "../components/PremiumAdBanner"; // ✅ Ad Banner Import Kiya
 import "./RoomsList.css";
 
 const RoomsList = () => {
@@ -52,6 +53,10 @@ const RoomsList = () => {
     <div className="rooms-page">
       <h2>Available Rooms</h2>
       <p className="subtitle">Find your perfect stay with ease</p>
+
+      {/* ✅ PREMIUM AD BANNER YAHAN PLACE KIYA */}
+      {/* Yeh sirf Free users ko dikhega, Premium users ko apne aap hide ho jayega */}
+      <PremiumAdBanner />
 
       {/* FILTER BAR */}
       <div className="filter-bar">
